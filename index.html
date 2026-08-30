@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192.png" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1" />
+  <meta name="theme-color" content="#0B0FC8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Campus-ERP" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" as="image" href="/splash-logo.png" />
+  <title>Campus-ERP</title>
+  <style>
+    /* -----------------------------------------------------------
+       *  Premium boot loader — inlined so it paints on the very
+       *  first frame, before React/JS parse. Zero white-flash.
+       * ---------------------------------------------------------*/
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0B0FC8;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #boot {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0B0FC8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 380ms ease, visibility 380ms ease;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    #boot.--hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #boot .logo-wrap {
+      width: 50vw;
+      max-width: 260px;
+      min-width: 180px;
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      animation: boot-fade 700ms ease both, boot-float 4.5s ease-in-out 700ms infinite;
+    }
+
+    #boot .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 60px rgba(0, 0, 0, .35));
+    }
+
+    #boot .bar {
+      margin-top: 44px;
+      width: 46vw;
+      max-width: 220px;
+      min-width: 160px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .14);
+      overflow: hidden;
+      position: relative;
+    }
+
+    #boot .bar::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 40%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, transparent, #FFFFFF 40%, #A9C4FF 100%);
+      animation: boot-slide 1.35s cubic-bezier(.4, 0, .2, 1) infinite;
+      will-change: transform;
+    }
+
+    #boot .msg {
+      margin-top: 18px;
+      font-size: 12.5px;
+      letter-spacing: .02em;
+      color: rgba(255, 255, 255, .72);
+      opacity: 0;
+      transition: opacity 400ms ease;
+      min-height: 16px;
+    }
+
+    #boot .msg.--show {
+      opacity: 1;
+    }
+
+    @keyframes boot-fade {
+      from {
+        opacity: 0;
+        transform: scale(.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes boot-float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes boot-slide {
+      0% {
+        transform: translateX(-110%);
+      }
+
+      100% {
+        transform: translateX(260%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      #boot .logo-wrap,
+      #boot .bar::before {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="boot" aria-hidden="true">
+    <div class="logo-wrap">
+      <img src="/splash-logo.png" alt="" />
+    </div>
+    <div class="bar" role="progressbar" aria-label="Loading"></div>
+    <div id="boot-msg" class="msg"></div>
+  </div>
+
+  <div id="root"></div>
+
+  <script>
+    // Show a subtle status message ONLY if boot takes noticeably long.
+    // The React app calls window.__hideBoot() as soon as the essential
+    // data (session + tenant) is ready.
+    (function () {
+      var msg = document.getElementById('boot-msg');
+      var t1 = setTimeout(function () {
+        if (!msg) return;
+        msg.textContent = 'Preparing your experience…';
+        msg.classList.add('--show');
+      }, 2500);
+      var t2 = setTimeout(function () {
+        if (!msg) return;
+        msg.textContent = 'Taking a little longer than usual…';
+      }, 9000);
+      // Failsafe: never let the boot screen stay past 8 s
+      var t3 = setTimeout(function () {
+        window.__hideBoot && window.__hideBoot();
+      }, 8000);
+
+      window.__hideBoot = function () {
+        clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+        var el = document.getElementById('boot');
+        if (!el) return;
+        el.classList.add('--hide');
+        setTimeout(function () { el && el.parentNode && el.parentNode.removeChild(el); }, 420);
+      };
+    })();
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
